@@ -1,0 +1,104 @@
+<h2>list.Title: {{ title }}</h2>
+<div ng-if="list != null">
+    <div style="background: #f1f1f1; padding: 10px;">
+        <h2 ng-click="getFields()">Fields</h2>
+        <table ng-if="fields != null">
+            <tr>
+                <th>Title</th>
+                <th>InternalName</th>
+                <th>Type</th>
+                <th>Hidden</th>
+            </tr>
+            <tr ng-repeat="field in fields" ng-if="!field.Hidden && field.TypeAsString != 'Computed'">
+                <td>{{field.Title}}</td>
+                <td>{{field.InternalName}}</td>
+                <td>{{field.TypeAsString}}</td>
+                <td>{{field.Hidden}}</td>
+                <td>{{field.LookupField}}</td>
+                <td>{{field.LookupList}}</td>
+            </tr>
+        </table>
+    </div>
+    <br />
+    <div style="background: #f1f1f1; padding: 10px;">
+        <h2 ng-click="getItems()">Items ({{list.ItemCount}})</h2>
+        <table ng-if="items != null">
+            <tr>
+                <th>Title</th>
+                <th ng-repeat="field in _fields">{{field.Title}}</th>
+            </tr>
+            <tr ng-repeat="item in items" ng-if="!item.Hidden">
+                <td>{{item.Title}}</td>
+                <td ng-repeat="field in _fields">{{item[field.Title]}}</td>
+            </tr>
+        </table>
+    </div>
+    <br />
+    <div style="background: #f1f1f1; padding: 10px;">
+        <h2 ng-click="getFieldsCSharp()">C# Class</h2>
+        <div ng-if="fieldsCSharp != null">
+            class {{title}}
+            {
+                <span class="tabBlock codeBlock">public int ID { get; set; }</span>
+                <span class="tabBlock codeBlock">public string Title { get; set; }</span>
+                <span class="tabBlock codeBlock">public DateTime Modified { get; set; }</span>
+                <span class="tabBlock codeBlock">public DateTime Created { get; set; }</span>
+                <span class="tabBlock codeBlock">public SPFieldLookupValue Author { get; set; }</span>
+                <span class="tabBlock codeBlock">public SPFieldLookupValue Editor { get; set; }</span>
+                <span class="tabBlock codeBlock" ng-repeat="field in fieldsCSharp" ng-if="field.TypeAsString != 'Computed' && field.TypeAsString != 'ModStat' && !field.FromBaseType">public {{getCsharpType(field.TypeAsString)}} {{field.InternalName }} { get; set; }</span>
+            }
+            <br>
+            <br>
+            
+            class {{title}}WithAllBaseTypes
+            {
+                <span class="tabBlock codeBlock" ng-repeat="field in fieldsCSharp" ng-if="field.TypeAsString != 'Computed' && field.TypeAsString != 'ModStat'">public {{getCsharpType(field.TypeAsString)}} {{field.InternalName }} { get; set; }</span>
+            }
+        </div>
+    </div>
+    <br />
+    <div style="background: #f1f1f1; padding: 10px;">
+        <h2 ng-click="angularGetVisible = !angularGetVisible">AngularJS GetItems</h2>
+        <div ng-if="angularGetVisible">
+
+            <span class="codeBlock">$http.get("/_api/Web/Lists(guid'{{list.Id}}')/Items", {</span>
+            <span class="tabBlock codeBlock">headers : { 'Accept' : 'application/json; odata=verbose' }</span>
+            <span class="codeBlock">}).then(function(result) {</span>
+            <span class="tabBlock codeBlock">doSomething(result.data.d.results);</span>
+            <span class="codeBlock">});</span>
+            
+        </div>
+    </div>
+    <br />
+    <div style="background: #f1f1f1; padding: 10px;">
+        <h2>Properties</h2>
+        <table>
+            <tr ng-repeat="(key, value) in list"> 
+                <td class="mono">{{key}}</td>   
+                <td class="mono">{{getType(value)}}</td>   
+                <td class="mono" ng-if="getType(value) != 'object'">{{value}}</td>   
+                <td class="mono" ng-if="getType(value) == 'object' && key != '__metadata'"><a ng-click="getContent($event, value.__deferred.uri)">View</a></td>   
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<table ng-if="object != null">
+    <tr ng-repeat="(key, value) in object"> 
+        <td class="mono">{{key}}</td>   
+        <td class="mono">{{value.Title}}</td>   
+        <td class="mono" ng-if="getType(value) == 'object' && key != '__metadata'"><a ng-click="getContent($event, value.__metadata.uri)">View</a></td>   
+    </tr>
+</table>
+
+<table ng-if="array != null">
+    <tr>
+        <th>Title</th>
+        <th ng-repeat="(key, value) in array[0]">{{key}}</th>
+    </tr>
+    <tr ng-repeat="item in array"> 
+        <td class="mono">{{item.Title}}</td>
+        <td class="mono" ng-repeat="(key, value) in item" ng-if="getType(column) != 'object'">{{value}}</td>   
+    </tr>
+</table>

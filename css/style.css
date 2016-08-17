@@ -1,0 +1,31 @@
+.container {
+    font-family: monospace!important;
+}
+
+.container select {
+    padding: 5px;
+    width: 300px;
+}
+
+.container table {
+    border-collapse: collapse;
+}
+
+.container td {
+    padding: 8px;
+    border-bottom: 1px solid #efefef;
+}
+
+.container a {
+    font-weight: 700;
+    color: red;
+    cursor: pointer;
+}
+
+.tabBlock {
+    margin-left: 30px;
+}
+
+.codeBlock {
+    display: block;
+}

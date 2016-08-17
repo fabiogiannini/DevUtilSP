@@ -1,0 +1,18 @@
+<div>
+	<table>
+		<tr>
+			<th>Id</th>
+			<th>Title</th>
+			<th>ItemCount</th>
+			<th>Hidden</th>
+			<th>ListItemEntityTypeFullName</th>
+		</tr>
+		<tr ng-repeat="item in lists">
+			<td class="mono">{{item.Id}}</td>
+			<td><a href="#/List/{{item.Id}}">{{item.Title}}</a></td>
+			<td>{{item.ItemCount}}</td>
+			<td>{{item.Hidden}}</td>
+			<td>{{item.ListItemEntityTypeFullName}}</td>
+		</tr>
+	</table>
+</div>
